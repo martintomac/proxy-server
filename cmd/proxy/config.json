@@ -1,0 +1,45 @@
+{
+  "routes": [
+    {
+      "pattern": "/hello",
+      "handler": {
+        "static": {
+          "message": "Hello there!"
+        }
+      }
+    },
+    {
+      "pattern": "/debug",
+      "handler": {
+        "debug": {}
+      }
+    },
+    {
+      "pattern": "/echo",
+      "handler": {
+        "echo": {}
+      }
+    },
+    {
+      "pattern": "/unstable",
+      "handler": {
+        "chaos": {
+          "handler": {
+            "static": {
+              "message": "You survived chaos!"
+            }
+          },
+          "failure_chance": 0.2
+        }
+      }
+    },
+    {
+      "pattern": "/google",
+      "handler": {
+        "forward": {
+          "url": "https://google.com"
+        }
+      }
+    }
+  ]
+}
