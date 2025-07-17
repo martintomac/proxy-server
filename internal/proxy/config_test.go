@@ -7,6 +7,7 @@ import (
 
 func TestConfigUnMarshalling(t *testing.T) {
 	t.Run("simple static handler config", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/hello", "handler": {"static": {"message": "Hello there!"}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -20,6 +21,7 @@ func TestConfigUnMarshalling(t *testing.T) {
 	})
 
 	t.Run("debug handler config", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/debug", "handler": {"debug": {}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -32,6 +34,7 @@ func TestConfigUnMarshalling(t *testing.T) {
 	})
 
 	t.Run("echo handler config", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/echo", "handler": {"echo": {}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -44,6 +47,7 @@ func TestConfigUnMarshalling(t *testing.T) {
 	})
 
 	t.Run("chaos handler config", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/chaos", "handler": {"chaos": {"failure_chance": 0.5, "handler": {"static": {"message": "Hello there!"}}}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -56,6 +60,7 @@ func TestConfigUnMarshalling(t *testing.T) {
 	})
 
 	t.Run("not found handler config", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/notfound", "handler": {"not_found": {}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -68,6 +73,7 @@ func TestConfigUnMarshalling(t *testing.T) {
 	})
 
 	t.Run("forward handler config", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/forward", "handler": {"forward": {"url": "https://example.com"}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -84,6 +90,7 @@ func TestConfigUnMarshalling(t *testing.T) {
 
 func TestConfig_CreateRouter(t *testing.T) {
 	t.Run("create router with static handler from json", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/test", "handler": {"static": {"message": "test message"}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -101,6 +108,7 @@ func TestConfig_CreateRouter(t *testing.T) {
 	})
 
 	t.Run("create router with debug handler from json", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/debug", "handler": {"debug": {}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -116,6 +124,7 @@ func TestConfig_CreateRouter(t *testing.T) {
 	})
 
 	t.Run("create router with echo handler from json", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/echo", "handler": {"echo": {}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -131,6 +140,7 @@ func TestConfig_CreateRouter(t *testing.T) {
 	})
 
 	t.Run("create router with chaos handler from json", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/chaos", "handler": {"chaos": {"failure_chance": 0.5, "handler": {"static": {"message": "Hello there!"}}}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -149,6 +159,7 @@ func TestConfig_CreateRouter(t *testing.T) {
 	})
 
 	t.Run("create router with not found handler from json", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/notfound", "handler": {"not_found": {}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -164,6 +175,7 @@ func TestConfig_CreateRouter(t *testing.T) {
 	})
 
 	t.Run("create router with forward handler from json", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/forward", "handler": {"forward": {"url": "https://example.com"}}}]}`
 
 		config, err := ReadConfigFromString(configJson)
@@ -181,6 +193,7 @@ func TestConfig_CreateRouter(t *testing.T) {
 	})
 
 	t.Run("multiple handlers in handler config should fail", func(t *testing.T) {
+		// language=JSON
 		configJson := `{"routes": [{"pattern": "/forward", "handler": {"forward": {"url": "https://example.com"}, "static": {"message": "Hello there!"}}}]}`
 		config, err := ReadConfigFromString(configJson)
 		assert.NoError(t, err)

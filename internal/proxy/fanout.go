@@ -1,7 +1,6 @@
 package proxy
 
 import (
-	"bytes"
 	"log"
 	"net/http"
 	"sync"
@@ -27,7 +26,7 @@ func (h *FanOutHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		go func(index int, h Handler) {
 			defer wg.Done()
 
-			brw := newBufferedResponseWriter()
+			brw := NewBufferedResponseWriter()
 			h.ServeHTTP(brw, r)
 			responses[index] = bufferedResponse{
 				statusCode: brw.statusCode,
@@ -53,32 +52,6 @@ type bufferedResponse struct {
 	statusCode int
 	header     http.Header
 	body       []byte
-}
-
-type bufferedResponseWriter struct {
-	header     http.Header
-	buffer     *bytes.Buffer
-	statusCode int
-}
-
-func newBufferedResponseWriter() *bufferedResponseWriter {
-	return &bufferedResponseWriter{
-		header:     make(http.Header),
-		buffer:     new(bytes.Buffer),
-		statusCode: http.StatusOK,
-	}
-}
-
-func (w *bufferedResponseWriter) Header() http.Header {
-	return w.header
-}
-
-func (w *bufferedResponseWriter) Write(data []byte) (int, error) {
-	return w.buffer.Write(data)
-}
-
-func (w *bufferedResponseWriter) WriteHeader(statusCode int) {
-	w.statusCode = statusCode
 }
 
 type FirstSuccessfulResponseStrategy struct{}
