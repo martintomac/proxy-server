@@ -86,6 +86,23 @@ func TestConfigUnMarshalling(t *testing.T) {
 			URL: "https://example.com",
 		}, route.Handler.Forward)
 	})
+
+	t.Run("retrier handler config", func(t *testing.T) {
+		// language=JSON
+		configJson := `{"routes": [{"pattern": "/retrier", "handler": {"retrier": {"handler": {"static": {"message": "Hello there!"}}, "retries": 3, "retry_policy": "non_2xx_retry"}}}]}`
+
+		config, err := ReadConfigFromString(configJson)
+		assert.NoError(t, err)
+
+		assert.Len(t, config.Routes, 1)
+		route := config.Routes[0]
+		assert.Equal(t, "/retrier", route.Pattern)
+		assert.Equal(t, &RetrierHandlerConfig{
+			Handler:     HandlerConfig{Static: &StaticHandlerConfig{Message: "Hello there!"}},
+			RetryPolicy: "non_2xx_retry",
+			Retries:     3,
+		}, route.Handler.Retrier)
+	})
 }
 
 func TestConfig_CreateRouter(t *testing.T) {

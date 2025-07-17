@@ -36,6 +36,7 @@ type HandlerConfig struct {
 	NotFound *NotFoundHandlerConfig `json:"not_found"`
 	Chaos    *ChaosHandlerConfig    `json:"chaos"`
 	Fanout   *FanOutHandlerConfig   `json:"fanout"`
+	Retrier  *RetrierHandlerConfig  `json:"retrier"`
 }
 
 func (h *HandlerConfig) createHandler() (Handler, error) {
@@ -144,6 +145,34 @@ func (c *FanOutHandlerConfig) createHandler() (Handler, error) {
 	return &FanOutHandler{
 		Handlers:         handlers,
 		ResponseStrategy: strategy,
+	}, nil
+}
+
+type RetrierHandlerConfig struct {
+	Handler     HandlerConfig `json:"handler"`
+	RetryPolicy string        `json:"retry_policy"`
+	Retries     int           `json:"retries"`
+}
+
+func (c *RetrierHandlerConfig) createHandler() (Handler, error) {
+	var retryPolicy RetryPolicy
+
+	policy := c.RetryPolicy
+
+	switch policy {
+	case "", "non_2xx_retry":
+		retryPolicy = &RetryOnNon2xxRetryPolicy{}
+	default:
+		return nil, fmt.Errorf("unknown retry policy: %s", policy)
+	}
+	handler, err := c.Handler.createHandler()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create handler for retrier: %w", err)
+	}
+	return &RetrierHandler{
+		Handler:     handler,
+		RetryPolicy: retryPolicy,
+		Retries:     c.Retries,
 	}, nil
 }
 
