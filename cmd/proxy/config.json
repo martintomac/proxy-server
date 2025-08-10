@@ -1,7 +1,9 @@
 {
   "routes": [
     {
-      "pattern": "/hello",
+      "matcher": {
+        "path": "/hello"
+      },
       "handler": {
         "static": {
           "message": "Hello there!"
@@ -9,19 +11,25 @@
       }
     },
     {
-      "pattern": "/debug",
+      "matcher": {
+        "path": "/debug"
+      },
       "handler": {
         "debug": {}
       }
     },
     {
-      "pattern": "/echo",
+      "matcher": {
+        "path": "/echo"
+      },
       "handler": {
         "echo": {}
       }
     },
     {
-      "pattern": "/unstable",
+      "matcher": {
+        "path": "/unstable"
+      },
       "handler": {
         "chaos": {
           "handler": {
@@ -34,7 +42,9 @@
       }
     },
     {
-      "pattern": "/retrier",
+      "matcher": {
+        "path": "/retrier"
+      },
       "handler": {
         "retrier": {
           "handler": {
@@ -52,7 +62,9 @@
       }
     },
     {
-      "pattern": "/google",
+      "matcher": {
+        "path": "/google"
+      },
       "handler": {
         "forward": {
           "url": "https://google.com"

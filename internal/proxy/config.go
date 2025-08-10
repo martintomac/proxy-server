@@ -24,8 +24,12 @@ func ReadConfigFromBytes(jsonBytes []byte) (*Config, error) {
 }
 
 type RouteConfig struct {
-	Pattern string        `json:"pattern"`
+	Matcher MatcherConfig `json:"matcher"`
 	Handler HandlerConfig `json:"handler"`
+}
+
+type MatcherConfig struct {
+	Path string `json:"path"`
 }
 
 type HandlerConfig struct {
@@ -183,9 +187,9 @@ func (c *Config) CreateRouter() (*PathRouter, error) {
 	for _, route := range c.Routes {
 		handler, err := route.Handler.createHandler()
 		if err != nil {
-			return nil, fmt.Errorf("failed to create handler for route %s: %w", route.Pattern, err)
+			return nil, fmt.Errorf("failed to create handler for route %s: %w", route.Matcher.Path, err)
 		}
-		router.AddRoute(route.Pattern, handler)
+		router.AddRoute(route.Matcher.Path, handler)
 	}
 
 	return router, nil
